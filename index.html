@@ -1,0 +1,398 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#130f08;--card:#1e1610;--card2:#251c0f;--acc:#c8860a;--gold:#e6a832;
+    --cream:#f5e6c8;--muted:#7a6a52;--border:#3a2c1c;--text:#f0dbb8;--dim:#2e2214;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
+  h1,h2,h3,h4{font-family:'Playfair Display',serif}
+
+  .hero{background:var(--card);border-bottom:1px solid var(--border);padding:0}
+  .hero-top{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem .8rem}
+  .brand{display:flex;align-items:center;gap:10px}
+  .brand-icon{width:36px;height:36px;background:var(--acc);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .brand-icon svg{width:20px;height:20px;fill:none;stroke:#fff;stroke-width:1.8}
+  .brand-name{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gold);letter-spacing:.5px}
+  .brand-sub{font-size:.7rem;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:400}
+  .header-meta{display:flex;align-items:center;gap:8px}
+  .meta-pill{background:var(--dim);border:1px solid var(--border);border-radius:20px;padding:4px 12px;font-size:.72rem;color:var(--muted);font-weight:400}
+  .meta-pill span{color:var(--gold)}
+
+  .nav-strip{display:flex;gap:0;border-top:1px solid var(--border)}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:.65rem .3rem .6rem;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;transition:all .18s;position:relative;border-right:1px solid var(--border)}
+  .nav-item:last-child{border-right:none}
+  .nav-item .nav-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .nav-item .nav-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .nav-item .nav-label{font-size:.68rem;font-weight:400;letter-spacing:.3px}
+  .nav-item.active{color:var(--gold);background:var(--dim)}
+  .nav-item.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2px;background:var(--acc);border-radius:2px 2px 0 0}
+  .nav-item:hover:not(.active){color:var(--cream);background:#1a1208}
+
+  .panel{display:none}
+  .panel.active{display:block}
+  .body{padding:1.2rem 1.2rem}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.1rem 1.2rem;margin-bottom:.9rem}
+  .card-title{font-size:.8rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:500;margin-bottom:.9rem;font-family:'DM Sans',sans-serif}
+
+  .label-row{display:flex;justify-content:space-between;margin-bottom:.25rem}
+  .lbl{font-size:.78rem;color:var(--muted)}
+  .val{font-size:.82rem;font-weight:500;color:var(--cream)}
+  input[type=range]{width:100%;accent-color:var(--acc);margin:.2rem 0 .75rem}
+  select{width:100%;background:var(--dim);border:1px solid var(--border);color:var(--cream);border-radius:8px;padding:.5rem .75rem;font-family:'DM Sans',sans-serif;font-size:.85rem;margin-bottom:.75rem}
+  select:focus{outline:none;border-color:var(--acc)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+
+  .result-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.5rem;margin:.5rem 0}
+  .res-box{background:var(--dim);border-radius:10px;padding:.7rem .5rem;text-align:center;border:1px solid var(--border)}
+  .res-lbl{font-size:.65rem;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:.2rem}
+  .res-num{font-size:1.3rem;font-family:'Playfair Display',serif;color:var(--gold);font-weight:500}
+
+  .flavor-wrap{margin:.6rem 0}
+  .fl-lbl{font-size:.7rem;color:var(--muted);margin-bottom:.4rem;letter-spacing:.8px;text-transform:uppercase}
+  .flavor-bar{display:flex;gap:6px;align-items:center;margin:.25rem 0}
+  .fn{width:55px;font-size:.72rem;color:var(--muted)}
+  .ft{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+  .ff{height:100%;border-radius:3px;transition:width .4s}
+
+  .btn{width:100%;padding:.7rem;background:var(--acc);color:#fff;border:none;border-radius:10px;font-family:'Playfair Display',serif;font-size:.95rem;font-weight:500;cursor:pointer;letter-spacing:.5px;transition:all .2s;margin-top:.4rem}
+  .btn:hover{background:var(--gold);color:var(--bg)}
+  .btn-ghost{padding:.4rem .9rem;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;transition:all .15s}
+  .btn-ghost:hover{border-color:var(--acc);color:var(--acc)}
+
+  .step{display:flex;gap:.7rem;align-items:flex-start;padding:.65rem .75rem;background:var(--dim);border-radius:9px;margin-bottom:.45rem}
+  .sn{min-width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:500;flex-shrink:0}
+  .st{font-size:.82rem;color:var(--cream);line-height:1.5}
+  .st strong{color:var(--gold);font-weight:500}
+
+  .recipe-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem}
+  @media(max-width:560px){.recipe-grid{grid-template-columns:1fr 1fr}}
+  .rc{background:var(--dim);border:1px solid var(--border);border-radius:12px;padding:.85rem .7rem;cursor:pointer;transition:all .18s;text-align:center}
+  .rc:hover{border-color:var(--acc);background:#2a1d0f}
+  .rc .ri{font-size:1.4rem;margin-bottom:.3rem}
+  .rc .rn{font-size:.8rem;font-weight:500;color:var(--cream);margin-bottom:.15rem}
+  .rc .rs{font-size:.68rem;color:var(--muted)}
+
+  .info-row{display:flex;justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
+  .info-row:last-child{border-bottom:none}
+  .ik{color:var(--muted)}
+  .iv{color:var(--cream);font-weight:500}
+
+  .timer-wrap{text-align:center;padding:.5rem 0 1rem}
+  .tc{width:96px;height:96px;border-radius:50%;margin:0 auto .9rem;display:flex;align-items:center;justify-content:center;background:var(--dim);border:3px solid var(--acc);position:relative}
+  .tc-inner{display:flex;flex-direction:column;align-items:center}
+  .td{font-size:1.5rem;color:var(--gold);font-family:'Playfair Display',serif;font-weight:700;line-height:1}
+  .tl{font-size:.6rem;color:var(--muted);margin-top:2px}
+  .preset-row{display:flex;gap:.4rem;justify-content:center;margin-bottom:.9rem}
+  .timer-btns{display:flex;gap:.5rem;max-width:260px;margin:0 auto}
+
+  input[type=text],input[type=number]{width:100%;background:var(--dim);border:1px solid var(--border);color:var(--cream);border-radius:8px;padding:.5rem .75rem;font-family:'DM Sans',sans-serif;font-size:.85rem;margin-bottom:.65rem}
+  input:focus{outline:none;border-color:var(--acc)}
+  textarea{background:var(--dim);border:1px solid var(--border);color:var(--cream);border-radius:8px;padding:.6rem .75rem;font-family:'DM Sans',sans-serif;font-size:.82rem;width:100%;resize:vertical;min-height:65px}
+  .saved{display:flex;justify-content:space-between;align-items:center;padding:.55rem .7rem;background:var(--dim);border-radius:8px;margin-bottom:.35rem}
+  .sn2{font-size:.83rem;color:var(--cream)}
+  .sm{font-size:.7rem;color:var(--muted);margin-top:2px}
+
+  .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:500;margin:.1rem}
+  .bw{background:#3d2010;color:#e0804a}
+  .bc{background:#0d2535;color:#5ab4e0}
+  .bn{background:#2a2a1a;color:#c8c870}
+
+  .toast{position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);background:var(--acc);color:#fff;padding:.45rem 1.1rem;border-radius:20px;font-size:.82rem;opacity:0;transition:opacity .25s;pointer-events:none;z-index:99}
+  .toast.show{opacity:1}
+</style>
+
+<div style="background:var(--bg);min-height:100vh">
+
+  <div class="hero">
+    <div class="hero-top">
+      <div class="brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">Brewmaster</div>
+          <div class="brand-sub">panduan meracik kopi</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="meta-pill">Metode: <span id="meta-metode">V60</span></div>
+      </div>
+    </div>
+
+    <nav class="nav-strip">
+      <button class="nav-item active" onclick="switchTab('racik',this)">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
+        <span class="nav-label">Racik</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('resep',this)">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <span class="nav-label">Resep</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('timer',this)">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <span class="nav-label">Timer</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('catatan',this)">
+        <div class="nav-icon"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <span class="nav-label">Catatan</span>
+      </button>
+    </nav>
+  </div>
+
+  <div class="body">
+
+    <div id="tab-racik" class="panel active">
+      <div class="card">
+        <div class="card-title">Metode seduh</div>
+        <select id="metode" onchange="updateRacik()">
+          <option value="v60">V60 Pour Over</option>
+          <option value="french">French Press</option>
+          <option value="aeropress">AeroPress</option>
+          <option value="espresso">Espresso</option>
+          <option value="moka">Moka Pot</option>
+          <option value="cold">Cold Brew</option>
+        </select>
+        <div class="grid2">
+          <div>
+            <div class="label-row"><span class="lbl">Kopi (gram)</span><span class="val" id="kopi-val">15g</span></div>
+            <input type="range" id="kopi-g" min="8" max="50" value="15" oninput="updateRacik()">
+          </div>
+          <div>
+            <div class="label-row"><span class="lbl">Rasio air</span><span class="val" id="rasio-val">1:15</span></div>
+            <input type="range" id="rasio" min="10" max="20" value="15" oninput="updateRacik()">
+          </div>
+        </div>
+        <div class="grid2">
+          <div>
+            <div class="label-row"><span class="lbl">Suhu air</span><span class="val" id="suhu-val">93°C</span></div>
+            <input type="range" id="suhu" min="70" max="100" value="93" oninput="updateRacik()">
+          </div>
+          <div>
+            <div class="label-row"><span class="lbl">Gilingan</span><span class="val" id="grind-val">Medium</span></div>
+            <input type="range" id="grind" min="1" max="5" value="3" oninput="updateRacik()">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Hasil racikan</div>
+        <div class="result-row">
+          <div class="res-box"><div class="res-lbl">Kopi</div><div class="res-num" id="res-kopi">15g</div></div>
+          <div class="res-box"><div class="res-lbl">Air</div><div class="res-num" id="res-air">225ml</div></div>
+          <div class="res-box"><div class="res-lbl">Waktu</div><div class="res-num" id="res-waktu">3:00</div></div>
+        </div>
+        <div class="flavor-wrap">
+          <div class="fl-lbl">Profil rasa</div>
+          <div class="flavor-bar"><span class="fn">Asam</span><div class="ft"><div class="ff" id="fl-asam" style="background:#c8860a"></div></div></div>
+          <div class="flavor-bar"><span class="fn">Pahit</span><div class="ft"><div class="ff" id="fl-pahit" style="background:#5ab4e0"></div></div></div>
+          <div class="flavor-bar"><span class="fn">Manis</span><div class="ft"><div class="ff" id="fl-manis" style="background:#4a7c4e"></div></div></div>
+          <div class="flavor-bar"><span class="fn">Body</span><div class="ft"><div class="ff" id="fl-body" style="background:#c85070"></div></div></div>
+        </div>
+        <div id="badges" style="margin:.4rem 0 .2rem"></div>
+        <button class="btn" onclick="simpanRacikan()">Simpan Racikan</button>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Langkah seduh</div>
+        <div id="langkah-list"></div>
+      </div>
+    </div>
+
+    <div id="tab-resep" class="panel">
+      <div class="card">
+        <div class="card-title">Resep populer</div>
+        <div class="recipe-grid" id="recipe-grid"></div>
+      </div>
+      <div id="resep-detail" class="card" style="display:none">
+        <div class="card-title" id="rd-nama"></div>
+        <div id="rd-info"></div>
+        <div style="font-size:.72rem;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin:.7rem 0 .4rem">Langkah</div>
+        <div id="rd-langkah"></div>
+        <button class="btn" onclick="pakaiResep()" style="margin-top:.7rem">Pakai Resep Ini</button>
+      </div>
+    </div>
+
+    <div id="tab-timer" class="panel">
+      <div class="card">
+        <div class="card-title">Timer seduh</div>
+        <div class="timer-wrap">
+          <div class="tc">
+            <div class="tc-inner">
+              <div class="td" id="timer-display">3:00</div>
+              <div class="tl">tersisa</div>
+            </div>
+          </div>
+          <div class="preset-row">
+            <button class="btn-ghost" onclick="setTimer(120)">2 min</button>
+            <button class="btn-ghost" onclick="setTimer(180)">3 min</button>
+            <button class="btn-ghost" onclick="setTimer(240)">4 min</button>
+            <button class="btn-ghost" onclick="setTimer(600)">10 min</button>
+          </div>
+          <div class="timer-btns">
+            <button class="btn" id="btn-timer" onclick="toggleTimer()" style="flex:1">Mulai</button>
+            <button class="btn-ghost" onclick="resetTimer()" style="padding:.7rem 1rem">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tahap seduh</div>
+        <div id="stage-list"></div>
+      </div>
+    </div>
+
+    <div id="tab-catatan" class="panel">
+      <div class="card">
+        <div class="card-title">Tambah catatan</div>
+        <input type="text" id="catatan-nama" placeholder="Nama kopi / origin (e.g. Flores Bajawa)">
+        <div class="grid2">
+          <input type="text" id="catatan-roast" placeholder="Tingkat roast">
+          <input type="number" id="catatan-skor" placeholder="Skor 1–10" min="1" max="10">
+        </div>
+        <textarea id="notes-area" placeholder="Catatan rasa, aroma, kesan..."></textarea>
+        <button class="btn" onclick="simpanCatatan()">Simpan Catatan</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Riwayat seduh</div>
+        <div id="saved-list"><p style="color:var(--muted);font-size:.83rem;text-align:center;padding:.3rem">Belum ada catatan</p></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const M={
+  v60:{nama:'V60',waktu:'3:00',sec:180,rasio:15,suhu:93,grind:3,asam:75,pahit:35,manis:55,body:40,
+    langkah:[{t:'Bilas filter',d:'Pasang filter kertas, bilas dengan air panas untuk menghilangkan bau kertas'},{t:'Bloom',d:'Tuang <strong>2× berat kopi</strong> air panas, tunggu <strong>30–45 detik</strong> agar CO₂ keluar'},{t:'Tuangan pertama',d:'Tuang perlahan hingga <strong>50% total air</strong>, gerakan spiral dari dalam ke luar'},{t:'Tuangan kedua',d:'Lanjutkan hingga <strong>75% total air</strong>, jaga ketinggian air stabil'},{t:'Tuangan terakhir',d:'Tuang sisa air, pastikan semua bubuk kopi basah dan merata'},{t:'Tunggu & nikmati',d:'Tunggu drip selesai (~3:00 menit total), lepas V60 dan sajikan'}]},
+  french:{nama:'French Press',waktu:'4:00',sec:240,rasio:15,suhu:95,grind:4,asam:30,pahit:60,manis:50,body:85,
+    langkah:[{t:'Panaskan wadah',d:'Tuang sedikit air panas ke dalam French Press untuk menghangatkannya'},{t:'Masukkan kopi',d:'Tuang kopi gilingan kasar, ratakan permukaannya'},{t:'Tuang air',d:'Tuang air panas <strong>95°C</strong> perlahan, pastikan semua kopi terendam, aduk pelan'},{t:'Pasang tutup & tunggu',d:'Pasang tutup tanpa menekan plunger, tunggu selama <strong>4 menit</strong>'},{t:'Tekan plunger',d:'Tekan plunger secara <strong>perlahan dan merata</strong> selama ~30 detik'},{t:'Segera tuang',d:'Tuang semua kopi ke gelas segera — jangan biarkan terendam terlalu lama'}]},
+  aeropress:{nama:'AeroPress',waktu:'1:30',sec:90,rasio:12,suhu:80,grind:2,asam:50,pahit:50,manis:60,body:70,
+    langkah:[{t:'Posisi inverted',d:'Gunakan posisi terbalik, masukkan plunger sekitar 1cm'},{t:'Masukkan kopi',d:'Tuang kopi gilingan medium-fine ke AeroPress'},{t:'Tambahkan air',d:'Tuang air <strong>80–85°C</strong> hingga batas atas, aduk 10 kali'},{t:'Tunggu',d:'Tutup dengan filter, tunggu selama <strong>1 menit</strong>'},{t:'Tekan',d:'Balikkan ke cangkir, tekan perlahan selama <strong>20–30 detik</strong>'},{t:'Encerkan',d:'Tambahkan air panas jika ingin profil lebih ringan (Americano style)'}]},
+  espresso:{nama:'Espresso',waktu:'0:25',sec:25,rasio:2,suhu:93,grind:1,asam:60,pahit:80,manis:45,body:95,
+    langkah:[{t:'Portafilter',d:'Bersihkan portafilter, pastikan benar-benar kering'},{t:'Dosis & tamp',d:'Masukkan <strong>18–20g kopi</strong>, tamp dengan tekanan <strong>~15kg</strong>, pastikan rata'},{t:'Flush group head',d:'Flush group head 2–3 detik untuk membersihkan dan memanaskan'},{t:'Lock & brew',d:'Pasang portafilter, start segera. Target <strong>25–30 detik</strong> untuk 30–40ml'},{t:'Evaluasi',d:'Crema golden-brown = sempurna. Terlalu cepat → grind lebih halus. Lama → lebih kasar'}]},
+  moka:{nama:'Moka Pot',waktu:'5:00',sec:300,rasio:7,suhu:100,grind:2,asam:40,pahit:70,manis:40,body:90,
+    langkah:[{t:'Isi basket bawah',d:'Isi dengan air panas mendekati garis safety valve'},{t:'Isi filter basket',d:'Masukkan kopi gilingan halus-medium, ratakan tanpa ditamp'},{t:'Pasang',d:'Kencangkan bagian atas dengan pelan (hati-hati panas)'},{t:'Api sedang',d:'Taruh di atas kompor api <strong>sedang-kecil</strong>, buka penutupnya'},{t:'Perhatikan aliran',d:'Kopi mengalir coklat gelap → tutup api saat sudah berwarna lebih muda'},{t:'Sajikan',d:'Bungkus bagian bawah dengan kain basah untuk menghentikan ekstraksi'}]},
+  cold:{nama:'Cold Brew',waktu:'12j+',sec:43200,rasio:8,suhu:4,grind:5,asam:25,pahit:30,manis:70,body:60,
+    langkah:[{t:'Siapkan wadah',d:'Gunakan toples kaca atau pitcher bersih'},{t:'Campurkan',d:'Campurkan kopi gilingan kasar dengan air <strong>dingin</strong> sesuai rasio'},{t:'Aduk rata',d:'Pastikan semua kopi basah dan tercampur dengan air'},{t:'Simpan di kulkas',d:'Tutup dan simpan di <strong>kulkas 12–24 jam</strong> (semakin lama = semakin kuat)'},{t:'Saring',d:'Saring dengan kertas kopi atau kain cheesecloth untuk memisahkan ampas'},{t:'Sajikan',d:'Tuang ke gelas berisi es, encerkan dengan air/susu 1:1 sesuai selera'}]}
+};
+const RESEP=[
+  {id:'v60c',nama:'V60 Classic',icon:'☕',sub:'Clean & bright',metode:'v60',grind:3,suhu:93,ratio:15},
+  {id:'fprich',nama:'French Press',icon:'🫖',sub:'Bold & full body',metode:'french',grind:4,suhu:95,ratio:15},
+  {id:'aero',nama:'AeroPress',icon:'⚗️',sub:'Smooth & balanced',metode:'aeropress',grind:2,suhu:82,ratio:12},
+  {id:'esp',nama:'Espresso',icon:'⚡',sub:'Intense & strong',metode:'espresso',grind:1,suhu:93,ratio:2},
+  {id:'moka',nama:'Moka Pot',icon:'🔥',sub:'Robust Italian',metode:'moka',grind:2,suhu:100,ratio:7},
+  {id:'cold',nama:'Cold Brew',icon:'🧊',sub:'Refreshing & smooth',metode:'cold',grind:5,suhu:4,ratio:8}
+];
+const grindNames=['','Sangat Halus','Halus','Medium','Kasar','Sangat Kasar'];
+let timerSec=180,timerTotal=180,timerInterval=null,timerRunning=false;
+let catatan=[],selectedResep=null;
+
+function updateRacik(){
+  const m=document.getElementById('metode').value;
+  const kg=+document.getElementById('kopi-g').value;
+  const rs=+document.getElementById('rasio').value;
+  const su=+document.getElementById('suhu').value;
+  const gr=+document.getElementById('grind').value;
+  document.getElementById('kopi-val').textContent=kg+'g';
+  document.getElementById('rasio-val').textContent='1:'+rs;
+  document.getElementById('suhu-val').textContent=su+'°C';
+  document.getElementById('grind-val').textContent=grindNames[gr];
+  document.getElementById('meta-metode').textContent=M[m].nama;
+  document.getElementById('res-kopi').textContent=kg+'g';
+  document.getElementById('res-air').textContent=(kg*rs)+'ml';
+  document.getElementById('res-waktu').textContent=M[m].waktu;
+  const tf=(su-70)/30,gf=(gr-1)/4;
+  const d=M[m];
+  document.getElementById('fl-asam').style.width=Math.min(100,Math.max(5,d.asam+gf*-20+tf*15))+'%';
+  document.getElementById('fl-pahit').style.width=Math.min(100,Math.max(5,d.pahit+gf*15+tf*10))+'%';
+  document.getElementById('fl-manis').style.width=Math.min(100,Math.max(5,d.manis))+'%';
+  document.getElementById('fl-body').style.width=Math.min(100,Math.max(5,d.body+gf*20))+'%';
+  const b=[];
+  if(su>=95)b.push('<span class="badge bw">Suhu Tinggi</span>');
+  if(su<=80)b.push('<span class="badge bc">Suhu Rendah</span>');
+  if(gr>=4)b.push('<span class="badge bn">Gilingan Kasar</span>');
+  if(gr<=2)b.push('<span class="badge bn">Gilingan Halus</span>');
+  if(rs>=17)b.push('<span class="badge bc">Encer</span>');
+  if(rs<=12)b.push('<span class="badge bw">Pekat</span>');
+  document.getElementById('badges').innerHTML=b.join('');
+  document.getElementById('langkah-list').innerHTML=d.langkah.map((l,i)=>`<div class="step"><div class="sn">${i+1}</div><div class="st"><strong>${l.t}</strong><br>${l.d}</div></div>`).join('');
+}
+
+function buildResepGrid(){
+  document.getElementById('recipe-grid').innerHTML=RESEP.map(r=>`<div class="rc" onclick="pilihResep('${r.id}')"><div class="ri" style="font-size:1.4rem">${r.icon}</div><div class="rn">${r.nama}</div><div class="rs">${r.sub}</div></div>`).join('');
+}
+function pilihResep(id){
+  selectedResep=RESEP.find(r=>r.id===id);
+  const r=selectedResep,m=M[r.metode];
+  document.getElementById('rd-nama').textContent=r.nama;
+  document.getElementById('rd-info').innerHTML=`<div class="info-row"><span class="ik">Rasio</span><span class="iv">1:${r.ratio}</span></div><div class="info-row"><span class="ik">Suhu</span><span class="iv">${r.suhu}°C</span></div><div class="info-row"><span class="ik">Waktu</span><span class="iv">${m.waktu}</span></div>`;
+  document.getElementById('rd-langkah').innerHTML=m.langkah.map((l,i)=>`<div class="step"><div class="sn">${i+1}</div><div class="st"><strong>${l.t}</strong><br>${l.d}</div></div>`).join('');
+  document.getElementById('resep-detail').style.display='block';
+}
+function pakaiResep(){
+  if(!selectedResep)return;
+  const r=selectedResep;
+  document.getElementById('metode').value=r.metode;
+  document.getElementById('rasio').value=r.ratio;
+  document.getElementById('suhu').value=r.suhu;
+  document.getElementById('grind').value=r.grind;
+  switchTab('racik',document.querySelector('.nav-item'));
+  updateRacik();
+  showToast('Resep '+r.nama+' diterapkan!');
+}
+
+function buildStages(){
+  const m=document.getElementById('metode').value;
+  document.getElementById('stage-list').innerHTML=M[m].langkah.slice(0,4).map((l,i)=>`<div class="info-row"><span class="ik">${i+1}. ${l.t}</span></div>`).join('');
+  setTimer(M[m].sec);
+}
+function setTimer(s){timerSec=s;timerTotal=s;timerRunning=false;clearInterval(timerInterval);document.getElementById('btn-timer').textContent='Mulai';updateTimerDisplay();}
+function toggleTimer(){
+  if(timerRunning){clearInterval(timerInterval);timerRunning=false;document.getElementById('btn-timer').textContent='Lanjut';}
+  else{
+    if(timerSec<=0){resetTimer();return;}
+    timerRunning=true;document.getElementById('btn-timer').textContent='Pause';
+    timerInterval=setInterval(()=>{timerSec--;updateTimerDisplay();if(timerSec<=0){clearInterval(timerInterval);timerRunning=false;document.getElementById('btn-timer').textContent='Selesai!';showToast('Timer selesai! ☕');}},1000);
+  }
+}
+function resetTimer(){clearInterval(timerInterval);timerRunning=false;timerSec=timerTotal;document.getElementById('btn-timer').textContent='Mulai';updateTimerDisplay();}
+function updateTimerDisplay(){
+  const m2=Math.floor(timerSec/60),s=timerSec%60;
+  document.getElementById('timer-display').textContent=m2+':'+(s<10?'0':'')+s;
+  const pct=timerTotal>0?Math.round((1-timerSec/timerTotal)*100):0;
+  const deg=Math.round(pct*3.6);
+  document.querySelector('.tc').style.background=`conic-gradient(var(--acc) ${deg}deg, var(--dim) 0)`;
+}
+
+function simpanRacikan(){showToast('Racikan tersimpan!');}
+function simpanCatatan(){
+  const nama=document.getElementById('catatan-nama').value.trim();
+  if(!nama){showToast('Isi nama kopi dulu!');return;}
+  catatan.unshift({nama,roast:document.getElementById('catatan-roast').value||'-',skor:document.getElementById('catatan-skor').value||'?',note:document.getElementById('notes-area').value||'',tgl:new Date().toLocaleDateString('id-ID')});
+  renderCatatan();
+  ['catatan-nama','catatan-roast','catatan-skor','notes-area'].forEach(id=>document.getElementById(id).value='');
+  showToast('Catatan tersimpan!');
+}
+function renderCatatan(){
+  const el=document.getElementById('saved-list');
+  if(!catatan.length){el.innerHTML='<p style="color:var(--muted);font-size:.83rem;text-align:center;padding:.3rem">Belum ada catatan</p>';return;}
+  el.innerHTML=catatan.map((c,i)=>`<div class="saved"><div><div class="sn2">${c.nama} <span style="color:var(--gold)">★${c.skor}</span></div><div class="sm">${c.roast} · ${c.tgl}</div></div><button class="btn-ghost" onclick="catatan.splice(${i},1);renderCatatan()" style="font-size:.7rem;padding:.3rem .6rem">Hapus</button></div>`).join('');
+}
+
+function switchTab(id,el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else document.querySelectorAll('.nav-item')[['racik','resep','timer','catatan'].indexOf(id)].classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='timer')buildStages();
+  if(id==='resep')buildResepGrid();
+}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2000);}
+updateRacik();
+</script>
