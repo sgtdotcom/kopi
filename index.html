@@ -1,0 +1,408 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0e0b06;--card:#1a1208;--dim:#221809;--acc:#c8860a;--gold:#e8aa30;
+  --cream:#f5e6c8;--muted:#6e5e46;--border:#2e2214;--text:#ecdbb5;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bot:env(safe-area-inset-bottom,0px);
+}
+html{font-size:16px;background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+
+.shell{display:flex;flex-direction:column;min-height:100vh;max-width:480px;margin:0 auto;position:relative}
+
+.statusbar{height:calc(10px + var(--safe-top));background:var(--card)}
+
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:.75rem 1rem .65rem;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:9px}
+.b-icon{width:32px;height:32px;background:var(--acc);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.b-icon svg{width:17px;height:17px;fill:none;stroke:#fff;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.b-name{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gold);letter-spacing:.3px;line-height:1}
+.b-sub{font-size:.58rem;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin-top:1px}
+.mpill{background:var(--dim);border:1px solid var(--border);border-radius:30px;padding:4px 11px;font-size:.68rem;color:var(--muted)}
+.mpill b{color:var(--gold);font-weight:500}
+
+.scroll-tabs{display:flex;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--border);scrollbar-width:none;padding:0 .5rem}
+.scroll-tabs::-webkit-scrollbar{display:none}
+.stab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:.6rem .9rem .5rem;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;white-space:nowrap;position:relative;min-width:72px;transition:color .15s}
+.stab svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s}
+.stab span{font-size:.68rem;font-weight:400}
+.stab.active{color:var(--gold)}
+.stab.active::after{content:'';position:absolute;bottom:0;left:20%;right:20%;height:2.5px;background:var(--acc);border-radius:2px 2px 0 0}
+
+.content{flex:1;padding:.85rem .9rem 5rem;overflow-y:auto}
+
+.panel{display:none}.panel.active{display:block}
+
+.sec{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:1rem 1.1rem;margin-bottom:.85rem;overflow:hidden}
+.sec-label{font-size:.62rem;color:var(--muted);letter-spacing:1.1px;text-transform:uppercase;font-weight:500;margin-bottom:.8rem}
+
+select{width:100%;background:var(--dim);border:1px solid var(--border);color:var(--cream);border-radius:12px;padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.88rem;margin-bottom:.8rem;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236e5e46' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+select:focus{outline:none;border-color:var(--acc)}
+
+.sl-row{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem}
+.sl-info{min-width:80px}
+.sl-lbl{font-size:.72rem;color:var(--muted)}
+.sl-val{font-size:.85rem;font-weight:500;color:var(--cream);margin-top:1px}
+input[type=range]{flex:1;accent-color:var(--acc);height:20px;cursor:pointer}
+
+.res3{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin:.5rem 0 .7rem}
+.rbox{background:var(--dim);border-radius:13px;padding:.75rem .4rem;text-align:center;border:1px solid var(--border)}
+.rlbl{font-size:.58rem;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-bottom:.2rem}
+.rnum{font-size:1.35rem;font-family:'Playfair Display',serif;color:var(--gold);font-weight:500;line-height:1}
+
+.fl-wrap{margin:.6rem 0}
+.fl-title{font-size:.62rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:.45rem}
+.flbar{display:flex;align-items:center;gap:8px;margin:.22rem 0}
+.fn{width:44px;font-size:.7rem;color:var(--muted);flex-shrink:0}
+.ft{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.ff{height:100%;border-radius:3px;transition:width .4s}
+
+.badgeline{display:flex;flex-wrap:wrap;gap:4px;margin:.4rem 0 .2rem}
+.badge{padding:3px 9px;border-radius:20px;font-size:.67rem;font-weight:500}
+.bw{background:#3d2010;color:#e0804a}.bc{background:#0d2535;color:#5ab4e0}.bn{background:#2a2a1a;color:#c8c870}
+
+.cta{width:100%;padding:.75rem;background:var(--acc);color:#fff;border:none;border-radius:13px;font-family:'Playfair Display',serif;font-size:1rem;font-weight:500;cursor:pointer;letter-spacing:.4px;transition:all .15s;margin-top:.5rem;display:flex;align-items:center;justify-content:center;gap:6px}
+.cta:active{transform:scale(.97);background:var(--gold);color:var(--bg)}
+.ghost{padding:.5rem 1rem;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;transition:all .15s}
+.ghost:active{border-color:var(--acc);color:var(--acc)}
+
+.steps{display:flex;flex-direction:column;gap:.4rem}
+.step{display:flex;gap:.65rem;align-items:flex-start;padding:.65rem .75rem;background:var(--dim);border-radius:12px}
+.snum{min-width:24px;height:24px;border-radius:50%;background:var(--acc);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:500;flex-shrink:0;margin-top:1px}
+.stxt{font-size:.82rem;color:var(--cream);line-height:1.55}
+.stxt strong{color:var(--gold);font-weight:500}
+
+.rcp-scroll{display:grid;grid-template-columns:repeat(3,1fr);gap:.55rem}
+.rcp{background:var(--dim);border:1px solid var(--border);border-radius:14px;padding:.8rem .5rem;cursor:pointer;text-align:center;transition:all .15s}
+.rcp:active{border-color:var(--acc);transform:scale(.97)}
+.ri{font-size:1.5rem;margin-bottom:.25rem;display:block}
+.rn{font-size:.77rem;font-weight:500;color:var(--cream);margin-bottom:.1rem}
+.rs{font-size:.62rem;color:var(--muted)}
+
+.info-row{display:flex;justify-content:space-between;padding:.42rem 0;border-bottom:1px solid var(--border);font-size:.82rem}
+.info-row:last-child{border-bottom:none}
+.ik{color:var(--muted)}.iv{color:var(--cream);font-weight:500}
+
+.tc-wrap{display:flex;flex-direction:column;align-items:center;padding:.3rem 0 .6rem}
+.tc{width:130px;height:130px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--dim);border:4px solid var(--acc);margin-bottom:.9rem;transition:background .05s}
+.td{font-size:2rem;color:var(--gold);font-family:'Playfair Display',serif;font-weight:700;line-height:1;text-align:center}
+.tl{font-size:.62rem;color:var(--muted);text-align:center;margin-top:2px}
+.presets{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-bottom:.85rem}
+.tbtns{display:flex;gap:.5rem;width:100%;max-width:260px}
+
+input[type=text],input[type=number]{width:100%;background:var(--dim);border:1px solid var(--border);color:var(--cream);border-radius:12px;padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.88rem;margin-bottom:.65rem}
+input:focus{outline:none;border-color:var(--acc)}
+textarea{background:var(--dim);border:1px solid var(--border);color:var(--cream);border-radius:12px;padding:.6rem .85rem;font-family:'DM Sans',sans-serif;font-size:.85rem;width:100%;resize:none;min-height:70px}
+textarea:focus{outline:none;border-color:var(--acc)}
+
+.log-item{display:flex;justify-content:space-between;align-items:flex-start;padding:.65rem .75rem;background:var(--dim);border-radius:12px;margin-bottom:.4rem}
+.li-main{font-size:.83rem;color:var(--cream)}
+.li-sub{font-size:.68rem;color:var(--muted);margin-top:2px}
+.li-score{font-size:1.1rem;font-family:'Playfair Display',serif;color:var(--gold);font-weight:500}
+.li-del{font-size:.68rem;color:var(--muted);cursor:pointer;background:none;border:none;padding:.3rem .5rem;font-family:'DM Sans',sans-serif}
+.li-del:active{color:#e24b4a}
+
+.bottom-hint{text-align:center;padding:.4rem;font-size:.65rem;color:var(--muted);letter-spacing:.5px}
+
+.toast{position:fixed;bottom:calc(1.2rem + var(--safe-bot));left:50%;transform:translateX(-50%);background:var(--card);border:1px solid var(--acc);color:var(--gold);padding:.45rem 1.1rem;border-radius:30px;font-size:.78rem;opacity:0;transition:opacity .2s;pointer-events:none;z-index:999;white-space:nowrap;font-weight:500}
+.toast.show{opacity:1}
+</style>
+
+<div class="shell">
+  <div class="statusbar"></div>
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="b-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
+      <div>
+        <div class="b-name">Brewmaster</div>
+        <div class="b-sub">panduan meracik kopi</div>
+      </div>
+    </div>
+    <div class="mpill">Mode: <b id="meta-m">V60</b></div>
+  </div>
+
+  <div class="scroll-tabs">
+    <button class="stab active" onclick="sw('racik',this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+      <span>Racik</span>
+    </button>
+    <button class="stab" onclick="sw('resep',this)">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+      <span>Resep</span>
+    </button>
+    <button class="stab" onclick="sw('timer',this)">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span>Timer</span>
+    </button>
+    <button class="stab" onclick="sw('catatan',this)">
+      <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      <span>Catatan</span>
+    </button>
+  </div>
+
+  <div class="content">
+
+    <div id="tab-racik" class="panel active">
+      <div class="sec">
+        <div class="sec-label">Metode seduh</div>
+        <select id="metode" onchange="upd()">
+          <option value="v60">☕  V60 Pour Over</option>
+          <option value="french">🫖  French Press</option>
+          <option value="aeropress">⚗️  AeroPress</option>
+          <option value="espresso">⚡  Espresso</option>
+          <option value="moka">🔥  Moka Pot</option>
+          <option value="cold">🧊  Cold Brew</option>
+        </select>
+        <div class="sl-row">
+          <div class="sl-info"><div class="sl-lbl">Kopi</div><div class="sl-val" id="v-kopi">15g</div></div>
+          <input type="range" id="kopi-g" min="8" max="50" value="15" step="1" oninput="upd()">
+        </div>
+        <div class="sl-row">
+          <div class="sl-info"><div class="sl-lbl">Rasio air</div><div class="sl-val" id="v-rasio">1:15</div></div>
+          <input type="range" id="rasio" min="10" max="20" value="15" step="1" oninput="upd()">
+        </div>
+        <div class="sl-row">
+          <div class="sl-info"><div class="sl-lbl">Suhu</div><div class="sl-val" id="v-suhu">93°C</div></div>
+          <input type="range" id="suhu" min="70" max="100" value="93" step="1" oninput="upd()">
+        </div>
+        <div class="sl-row">
+          <div class="sl-info"><div class="sl-lbl">Gilingan</div><div class="sl-val" id="v-grind">Medium</div></div>
+          <input type="range" id="grind" min="1" max="5" value="3" step="1" oninput="upd()">
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-label">Hasil racikan</div>
+        <div class="res3">
+          <div class="rbox"><div class="rlbl">Kopi</div><div class="rnum" id="r-kopi">15g</div></div>
+          <div class="rbox"><div class="rlbl">Air</div><div class="rnum" id="r-air">225ml</div></div>
+          <div class="rbox"><div class="rlbl">Waktu</div><div class="rnum" id="r-waktu">3:00</div></div>
+        </div>
+        <div class="fl-wrap">
+          <div class="fl-title">Profil rasa</div>
+          <div class="flbar"><span class="fn">Asam</span><div class="ft"><div class="ff" id="fl-a" style="background:#c8860a;width:75%"></div></div></div>
+          <div class="flbar"><span class="fn">Pahit</span><div class="ft"><div class="ff" id="fl-p" style="background:#5ab4e0;width:35%"></div></div></div>
+          <div class="flbar"><span class="fn">Manis</span><div class="ft"><div class="ff" id="fl-m" style="background:#4a9c5a;width:55%"></div></div></div>
+          <div class="flbar"><span class="fn">Body</span><div class="ft"><div class="ff" id="fl-b" style="background:#c85070;width:40%"></div></div></div>
+        </div>
+        <div class="badgeline" id="badges"></div>
+        <button class="cta" onclick="toast('Racikan tersimpan! ☕')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v14a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan Racikan
+        </button>
+      </div>
+
+      <div class="sec">
+        <div class="sec-label">Langkah seduh</div>
+        <div class="steps" id="langkah-list"></div>
+      </div>
+    </div>
+
+    <div id="tab-resep" class="panel">
+      <div class="sec">
+        <div class="sec-label">Pilih resep</div>
+        <div class="rcp-scroll" id="rcp-grid"></div>
+      </div>
+      <div class="sec" id="rcp-detail" style="display:none">
+        <div class="sec-label" id="rd-nama"></div>
+        <div id="rd-info"></div>
+        <div style="height:.6rem"></div>
+        <div class="steps" id="rd-steps"></div>
+        <button class="cta" onclick="pakaiResep()" style="margin-top:.65rem">Pakai Resep Ini</button>
+      </div>
+    </div>
+
+    <div id="tab-timer" class="panel">
+      <div class="sec">
+        <div class="sec-label">Timer seduh</div>
+        <div class="tc-wrap">
+          <div class="tc" id="tc">
+            <div><div class="td" id="t-disp">3:00</div><div class="tl">tersisa</div></div>
+          </div>
+          <div class="presets">
+            <button class="ghost" onclick="setT(90)">1:30</button>
+            <button class="ghost" onclick="setT(120)">2 min</button>
+            <button class="ghost" onclick="setT(180)">3 min</button>
+            <button class="ghost" onclick="setT(240)">4 min</button>
+            <button class="ghost" onclick="setT(600)">10 min</button>
+          </div>
+          <div class="tbtns">
+            <button class="cta" id="btn-t" onclick="togT()" style="flex:1">Mulai</button>
+            <button class="ghost" onclick="rstT()" style="padding:.75rem 1.1rem">Reset</button>
+          </div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-label">Tahap seduh</div>
+        <div id="stage-list"></div>
+      </div>
+    </div>
+
+    <div id="tab-catatan" class="panel">
+      <div class="sec">
+        <div class="sec-label">Tambah catatan</div>
+        <input type="text" id="c-nama" placeholder="Nama kopi / origin (e.g. Flores Bajawa)">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+          <input type="text" id="c-roast" placeholder="Tingkat roast">
+          <input type="number" id="c-skor" placeholder="Skor 1–10" min="1" max="10">
+        </div>
+        <textarea id="c-note" placeholder="Catatan rasa, aroma, kesan..."></textarea>
+        <button class="cta" onclick="saveCatatan()" style="margin-top:.65rem">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Simpan Catatan
+        </button>
+      </div>
+      <div class="sec">
+        <div class="sec-label">Riwayat seduh</div>
+        <div id="log-list"><p style="color:var(--muted);font-size:.82rem;text-align:center;padding:.2rem 0">Belum ada catatan</p></div>
+      </div>
+    </div>
+
+    <div class="bottom-hint">Brewmaster · racik dengan presisi</div>
+  </div>
+</div>
+
+<div class="toast" id="tst"></div>
+
+<script>
+const MD={
+  v60:{n:'V60',w:'3:00',s:180,a:75,p:35,m:55,b:40,steps:[{t:'Bilas filter',d:'Pasang filter kertas, bilas dengan air panas'},{t:'Bloom',d:'Tuang <strong>2× berat kopi</strong> air panas, tunggu <strong>30–45 detik</strong>'},{t:'Tuangan pertama',d:'Tuang hingga <strong>50% total air</strong>, gerakan spiral dari dalam keluar'},{t:'Tuangan kedua',d:'Lanjutkan hingga <strong>75% total air</strong>'},{t:'Tuangan terakhir',d:'Tuang sisa air, semua bubuk kopi harus basah'},{t:'Tunggu & nikmati',d:'Drip selesai ~3:00 menit total'}]},
+  french:{n:'French Press',w:'4:00',s:240,a:30,p:60,m:50,b:85,steps:[{t:'Panaskan wadah',d:'Tuang air panas dulu untuk menghangatkan French Press'},{t:'Masukkan kopi',d:'Kopi gilingan kasar, ratakan'},{t:'Tuang air',d:'Air <strong>95°C</strong>, aduk pelan, pastikan semua basah'},{t:'Tutup & tunggu',d:'Pasang tutup, tunggu <strong>4 menit</strong>'},{t:'Tekan plunger',d:'Tekan <strong>perlahan dan merata</strong> ~30 detik'},{t:'Segera tuang',d:'Tuang ke gelas segera'}]},
+  aeropress:{n:'AeroPress',w:'1:30',s:90,a:50,p:50,m:60,b:70,steps:[{t:'Posisi inverted',d:'Posisi terbalik, plunger masuk ~1cm'},{t:'Masukkan kopi',d:'Gilingan medium-fine'},{t:'Tambahkan air',d:'Air <strong>80–85°C</strong>, aduk 10 kali'},{t:'Tunggu',d:'Pasang filter, tunggu <strong>1 menit</strong>'},{t:'Tekan',d:'Balikkan ke cangkir, tekan pelan <strong>20–30 detik</strong>'}]},
+  espresso:{n:'Espresso',w:'0:25',s:25,a:60,p:80,m:45,b:95,steps:[{t:'Portafilter',d:'Bersihkan dan keringkan portafilter'},{t:'Dosis & tamp',d:'<strong>18–20g kopi</strong>, tamp tekanan <strong>~15kg</strong>'},{t:'Flush group head',d:'Flush 2–3 detik'},{t:'Brew',d:'Target <strong>25–30 detik</strong> untuk 30–40ml'},{t:'Evaluasi crema',d:'Golden-brown = sempurna'}]},
+  moka:{n:'Moka Pot',w:'5:00',s:300,a:40,p:70,m:40,b:90,steps:[{t:'Isi basket bawah',d:'Air panas hingga garis safety valve'},{t:'Isi filter basket',d:'Kopi gilingan halus-medium, rata tanpa ditamp'},{t:'Pasang & nyalakan',d:'Api <strong>sedang-kecil</strong>, buka penutup'},{t:'Amati aliran',d:'Matikan api saat warna mulai memudar'},{t:'Sajikan',d:'Bungkus bawah kain basah, tuang segera'}]},
+  cold:{n:'Cold Brew',w:'12j+',s:43200,a:25,p:30,m:70,b:60,steps:[{t:'Siapkan wadah',d:'Toples kaca atau pitcher bersih'},{t:'Campurkan',d:'Kopi gilingan kasar + air <strong>dingin</strong> sesuai rasio'},{t:'Aduk rata',d:'Semua kopi harus basah'},{t:'Kulkas 12–24 jam',d:'Semakin lama semakin kuat'},{t:'Saring',d:'Filter kertas atau cheesecloth'},{t:'Sajikan',d:'Tuang ke es batu, encerkan 1:1'}]}
+};
+const RESEP=[
+  {id:'v60c',n:'V60 Classic',ico:'☕',sub:'Clean & bright',m:'v60',g:3,su:93,r:15},
+  {id:'fp',n:'French Press',ico:'🫖',sub:'Bold & full body',m:'french',g:4,su:95,r:15},
+  {id:'aero',n:'AeroPress',ico:'⚗️',sub:'Smooth balanced',m:'aeropress',g:2,su:82,r:12},
+  {id:'esp',n:'Espresso',ico:'⚡',sub:'Intense & strong',m:'espresso',g:1,su:93,r:2},
+  {id:'moka',n:'Moka Pot',ico:'🔥',sub:'Robust Italian',m:'moka',g:2,su:100,r:7},
+  {id:'cold',n:'Cold Brew',ico:'🧊',sub:'Refreshing',m:'cold',g:5,su:4,r:8}
+];
+const GN=['','Sangat Halus','Halus','Medium','Kasar','Sangat Kasar'];
+let tSec=180,tTot=180,tInt=null,tOn=false,selR=null,logs=[];
+
+function upd(){
+  const m=document.getElementById('metode').value;
+  const kg=+document.getElementById('kopi-g').value;
+  const rs=+document.getElementById('rasio').value;
+  const su=+document.getElementById('suhu').value;
+  const gr=+document.getElementById('grind').value;
+  document.getElementById('v-kopi').textContent=kg+'g';
+  document.getElementById('v-rasio').textContent='1:'+rs;
+  document.getElementById('v-suhu').textContent=su+'°C';
+  document.getElementById('v-grind').textContent=GN[gr];
+  document.getElementById('meta-m').textContent=MD[m].n;
+  document.getElementById('r-kopi').textContent=kg+'g';
+  document.getElementById('r-air').textContent=(kg*rs)+'ml';
+  document.getElementById('r-waktu').textContent=MD[m].w;
+  const tf=(su-70)/30,gf=(gr-1)/4,d=MD[m];
+  document.getElementById('fl-a').style.width=Math.min(100,Math.max(5,Math.round(d.a+gf*-20+tf*15)))+'%';
+  document.getElementById('fl-p').style.width=Math.min(100,Math.max(5,Math.round(d.p+gf*15+tf*10)))+'%';
+  document.getElementById('fl-m').style.width=Math.min(100,Math.max(5,d.m))+'%';
+  document.getElementById('fl-b').style.width=Math.min(100,Math.max(5,Math.round(d.b+gf*20)))+'%';
+  const b=[];
+  if(su>=95)b.push('<span class="badge bw">Suhu Tinggi</span>');
+  if(su<=80)b.push('<span class="badge bc">Suhu Rendah</span>');
+  if(gr>=4)b.push('<span class="badge bn">Gilingan Kasar</span>');
+  if(gr<=2)b.push('<span class="badge bn">Gilingan Halus</span>');
+  if(rs>=17)b.push('<span class="badge bc">Encer</span>');
+  if(rs<=12)b.push('<span class="badge bw">Pekat</span>');
+  document.getElementById('badges').innerHTML=b.join('');
+  document.getElementById('langkah-list').innerHTML=d.steps.map((l,i)=>
+    `<div class="step"><div class="snum">${i+1}</div><div class="stxt"><strong>${l.t}</strong><br>${l.d}</div></div>`).join('');
+}
+
+function buildRcp(){
+  document.getElementById('rcp-grid').innerHTML=RESEP.map(r=>
+    `<div class="rcp" onclick="pilihR('${r.id}')"><span class="ri">${r.ico}</span><div class="rn">${r.n}</div><div class="rs">${r.sub}</div></div>`).join('');
+}
+function pilihR(id){
+  selR=RESEP.find(r=>r.id===id);
+  const d=MD[selR.m];
+  document.getElementById('rd-nama').textContent=selR.n;
+  document.getElementById('rd-info').innerHTML=
+    `<div class="info-row"><span class="ik">Rasio</span><span class="iv">1:${selR.r}</span></div>`+
+    `<div class="info-row"><span class="ik">Suhu</span><span class="iv">${selR.su}°C</span></div>`+
+    `<div class="info-row"><span class="ik">Waktu</span><span class="iv">${d.w}</span></div>`;
+  document.getElementById('rd-steps').innerHTML=d.steps.map((l,i)=>
+    `<div class="step"><div class="snum">${i+1}</div><div class="stxt"><strong>${l.t}</strong><br>${l.d}</div></div>`).join('');
+  document.getElementById('rcp-detail').style.display='block';
+  document.getElementById('rcp-detail').scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function pakaiResep(){
+  if(!selR)return;
+  document.getElementById('metode').value=selR.m;
+  document.getElementById('rasio').value=selR.r;
+  document.getElementById('suhu').value=selR.su;
+  document.getElementById('grind').value=selR.g;
+  sw('racik',document.querySelector('.stab'));
+  upd();toast('Resep '+selR.n+' diterapkan!');
+}
+
+function buildStages(){
+  const m=document.getElementById('metode').value;
+  document.getElementById('stage-list').innerHTML=MD[m].steps.slice(0,4).map((l,i)=>
+    `<div class="info-row"><span class="ik">${i+1}. ${l.t}</span></div>`).join('');
+  setT(MD[m].s);
+}
+function setT(s){tSec=s;tTot=s;tOn=false;clearInterval(tInt);document.getElementById('btn-t').textContent='Mulai';updT();}
+function togT(){
+  if(tOn){clearInterval(tInt);tOn=false;document.getElementById('btn-t').textContent='Lanjut';}
+  else{
+    if(tSec<=0){rstT();return;}
+    tOn=true;document.getElementById('btn-t').textContent='Pause';
+    tInt=setInterval(()=>{tSec--;updT();if(tSec<=0){clearInterval(tInt);tOn=false;document.getElementById('btn-t').textContent='Selesai!';toast('Timer selesai! ☕');}},1000);
+  }
+}
+function rstT(){clearInterval(tInt);tOn=false;tSec=tTot;document.getElementById('btn-t').textContent='Mulai';updT();}
+function updT(){
+  const m=Math.floor(tSec/60),s=tSec%60;
+  document.getElementById('t-disp').textContent=m+':'+(s<10?'0':'')+s;
+  const deg=tTot>0?Math.round((1-tSec/tTot)*360):0;
+  document.getElementById('tc').style.background=`conic-gradient(var(--acc) ${deg}deg, var(--dim) 0)`;
+}
+
+function saveCatatan(){
+  const nm=document.getElementById('c-nama').value.trim();
+  if(!nm){toast('Isi nama kopi dulu!');return;}
+  logs.unshift({nm,roast:document.getElementById('c-roast').value||'-',skor:document.getElementById('c-skor').value||'?',note:document.getElementById('c-note').value||'',tgl:new Date().toLocaleDateString('id-ID')});
+  renderLog();
+  ['c-nama','c-roast','c-skor','c-note'].forEach(id=>document.getElementById(id).value='');
+  toast('Catatan tersimpan!');
+}
+function renderLog(){
+  const el=document.getElementById('log-list');
+  if(!logs.length){el.innerHTML='<p style="color:var(--muted);font-size:.82rem;text-align:center;padding:.2rem 0">Belum ada catatan</p>';return;}
+  el.innerHTML=logs.map((c,i)=>`<div class="log-item">
+    <div><div class="li-main">${c.nm}</div><div class="li-sub">${c.roast} · ${c.tgl}${c.note?'<br>'+c.note.slice(0,50)+(c.note.length>50?'…':''):''}</div></div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+      <div class="li-score">★${c.skor}</div>
+      <button class="li-del" onclick="logs.splice(${i},1);renderLog()">Hapus</button>
+    </div>
+  </div>`).join('');
+}
+
+function sw(id,el){
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('active'));
+  if(el)el.classList.add('active');
+  else document.querySelectorAll('.stab')[['racik','resep','timer','catatan'].indexOf(id)].classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  if(id==='timer')buildStages();
+  if(id==='resep')buildRcp();
+}
+function toast(msg){
+  const t=document.getElementById('tst');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2200);
+}
+upd();
+</script>
